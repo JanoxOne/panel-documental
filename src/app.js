@@ -4,14 +4,24 @@ const express = require('express');
 const session = require('express-session');
 const helmet = require('helmet');
 const { openDatabase, createUserRepo } = require('./db');
+const { createBandejaRepo } = require('./bandeja');
 const { createLoginLimiter } = require('./security/rateLimit');
 const { loadUser, csrf } = require('./middleware/auth');
 const authRoutes = require('./routes/auth');
 const panelRoutes = require('./routes/panel');
 
+/** 'YYYY-MM-DD[ HH:MM:SS]' (UTC en SQLite) → 'DD-MM-YYYY[ HH:MM]'. */
+function formatDate(value, { time = false } = {}) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/.exec(String(value || ''));
+  if (!m) return '—';
+  const date = `${m[3]}-${m[2]}-${m[1]}`;
+  return time && m[4] ? `${date} ${m[4]}:${m[5]}` : date;
+}
+
 function createApp(config) {
   const db = openDatabase(config);
   const users = createUserRepo(db);
+  const bandeja = createBandejaRepo(db);
   const limiter = createLoginLimiter(config.loginRateLimit);
 
   const app = express();
@@ -52,7 +62,7 @@ function createApp(config) {
   app.use(csrf);
 
   app.use('/', authRoutes({ config, users, limiter }));
-  app.use('/panel', panelRoutes());
+  app.use('/panel', panelRoutes({ bandeja }));
 
   app.use((req, res) => {
     res.status(404).render('error', { title: 'No encontrado', message: 'La página solicitada no existe.' });
@@ -63,7 +73,9 @@ function createApp(config) {
     res.status(500).render('error', { title: 'Error', message: 'Ocurrió un error inesperado.' });
   });
 
+  app.locals.formatDate = formatDate;
   app.locals.db = db;
+  app.locals.repos = { users, bandeja };
   return app;
 }
 

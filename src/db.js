@@ -20,7 +20,37 @@ function openDatabase(config) {
       last_login_at TEXT,
       created_at    TEXT NOT NULL DEFAULT (datetime('now'))
     );
+
+    CREATE TABLE IF NOT EXISTS documentos (
+      id              INTEGER PRIMARY KEY AUTOINCREMENT,
+      folio           TEXT NOT NULL UNIQUE,
+      tipo            TEXT NOT NULL CHECK (tipo IN ('memo', 'oficio', 'resolucion', 'circular', 'carta', 'otro')),
+      materia         TEXT NOT NULL,
+      descripcion     TEXT,
+      remitente       TEXT NOT NULL,
+      origen          TEXT NOT NULL CHECK (origen IN ('interno', 'oficina_partes')),
+      fecha_documento TEXT NOT NULL,
+      created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    -- Cada fila es un documento en la bandeja de entrada de un destinatario.
+    -- accion: qué se le pide (conocimiento, visar o firmar); estado: si ya lo hizo.
+    CREATE TABLE IF NOT EXISTS bandeja_entrada (
+      id              INTEGER PRIMARY KEY AUTOINCREMENT,
+      documento_id    INTEGER NOT NULL REFERENCES documentos(id) ON DELETE CASCADE,
+      destinatario_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      accion          TEXT NOT NULL DEFAULT 'conocimiento' CHECK (accion IN ('conocimiento', 'visar', 'firmar')),
+      estado          TEXT NOT NULL DEFAULT 'pendiente' CHECK (estado IN ('pendiente', 'completado')),
+      leido           INTEGER NOT NULL DEFAULT 0,
+      archivado       INTEGER NOT NULL DEFAULT 0,
+      recibido_at     TEXT NOT NULL DEFAULT (datetime('now')),
+      completado_at   TEXT,
+      archivado_at    TEXT
+    );
+    CREATE INDEX IF NOT EXISTS idx_bandeja_destinatario
+      ON bandeja_entrada (destinatario_id, archivado, accion, estado);
   `);
+  db.exec('PRAGMA foreign_keys = ON');
   seedAdmin(db, config);
   return db;
 }

@@ -1,0 +1,8 @@
+<%# Selector de carpetas en la página: visible en móvil o con el menú lateral oculto. %>
+<nav class="folder-bar" aria-label="Carpetas de la bandeja">
+  <% for (const c of carpetas) { %>
+    <a href="/panel/bandeja-entrada/<%= c.slug %>" class="chip<%= carpetaActual === c.slug ? ' active' : '' %>"<%- carpetaActual === c.slug ? ' aria-current="page"' : '' %>>
+      <%= c.label %> <% const b = insignia(c, conteos[c.slug]); if (b.n) { %><span class="count<%= b.destacada ? ' count-new' : '' %>" title="<%= b.n %> <%= b.titulo %>"><%= b.n %></span><% } %>
+    </a>
+  <% } %>
+</nav>

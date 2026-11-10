@@ -1,0 +1,77 @@
+<%- include('../../partials/layout-top', { title }) %>
+<%- include('carpetas') %>
+
+<p class="breadcrumb"><a href="/panel/bandeja-entrada/<%= carpeta.slug %>">‹ <%= carpeta.label %></a></p>
+
+<% if (flash) { %>
+  <div class="<%= flash.tipo === 'ok' ? 'notice' : 'alert' %>" role="status"><%= flash.mensaje %></div>
+<% } %>
+
+<article class="card doc-detail">
+  <header class="doc-head">
+    <div>
+      <span class="tag"><%= tipos[entrada.tipo] %></span>
+      <span class="mono muted"><%= entrada.folio %></span>
+      <h2><%= entrada.materia %></h2>
+    </div>
+    <%
+      const estados = {
+        'por-visar': ['Pendiente de visación', 'warn'],
+        'por-firmar': ['Pendiente de firma', 'warn'],
+        visados: ['Visado', 'ok'],
+        firmados: ['Firmado', 'ok'],
+        archivados: ['Archivado', 'neutral'],
+      };
+      const estado = estados[carpeta.slug];
+    %>
+    <% if (estado) { %><span class="status status-<%= estado[1] %>"><%= estado[0] %></span><% } %>
+  </header>
+
+  <dl class="details">
+    <dt>Remitente</dt><dd><%= entrada.remitente %></dd>
+    <dt>Origen</dt><dd><%= entrada.origen === 'interno' ? 'Interno' : 'Oficina de Partes' %></dd>
+    <dt>Fecha del documento</dt><dd><%= formatDate(entrada.fecha_documento) %></dd>
+    <dt>Recibido</dt><dd><%= formatDate(entrada.recibido_at, { time: true }) %> (UTC)</dd>
+    <% if (entrada.completado_at) { %>
+      <dt><%= entrada.accion === 'firmar' ? 'Firmado' : 'Visado' %></dt><dd><%= formatDate(entrada.completado_at, { time: true }) %> (UTC)</dd>
+    <% } %>
+    <% if (entrada.archivado_at) { %>
+      <dt>Archivado</dt><dd><%= formatDate(entrada.archivado_at, { time: true }) %> (UTC)</dd>
+    <% } %>
+  </dl>
+
+  <% if (entrada.descripcion) { %>
+    <section class="doc-body">
+      <h3>Descripción</h3>
+      <p><%= entrada.descripcion %></p>
+    </section>
+  <% } %>
+
+  <footer class="actions">
+    <% const base = `/panel/bandeja-entrada/doc/${entrada.id}`; %>
+    <% if (!entrada.archivado && entrada.estado === 'pendiente' && entrada.accion === 'visar') { %>
+      <form method="post" action="<%= base %>/visar">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="btn btn-primary" type="submit"><%- include('../../partials/icon', { name: 'check' }) %>Visar</button>
+      </form>
+    <% } %>
+    <% if (!entrada.archivado && entrada.estado === 'pendiente' && entrada.accion === 'firmar') { %>
+      <form method="post" action="<%= base %>/firmar">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="btn btn-primary" type="submit"><%- include('../../partials/icon', { name: 'pen' }) %>Firmar</button>
+      </form>
+    <% } %>
+    <% if (entrada.archivado) { %>
+      <form method="post" action="<%= base %>/restaurar">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="btn btn-secondary" type="submit"><%- include('../../partials/icon', { name: 'inbox' }) %>Restaurar a la bandeja</button>
+      </form>
+    <% } else { %>
+      <form method="post" action="<%= base %>/archivar">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="btn btn-secondary" type="submit"><%- include('../../partials/icon', { name: 'archive' }) %>Archivar</button>
+      </form>
+    <% } %>
+  </footer>
+</article>
+<%- include('../../partials/layout-bottom') %>

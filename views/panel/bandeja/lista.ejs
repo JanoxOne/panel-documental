@@ -1,0 +1,62 @@
+<%- include('../../partials/layout-top', { title }) %>
+<%- include('carpetas') %>
+
+<div class="page-head">
+  <div>
+    <h2><%= carpeta.label %></h2>
+    <p class="muted">
+      <%= resultado.total %> documento<%= resultado.total === 1 ? '' : 's' %><%= q ? ` para «${q}»` : '' %><% if (conteos[carpeta.slug].sinLeer) { %> · <strong><%= conteos[carpeta.slug].sinLeer %> sin leer</strong><% } %>
+    </p>
+  </div>
+  <form class="search" method="get" action="/panel/bandeja-entrada/<%= carpeta.slug %>" role="search">
+    <label for="q" class="sr-only">Buscar en <%= carpeta.label %></label>
+    <%- include('../../partials/icon', { name: 'search' }) %>
+    <input id="q" name="q" type="search" value="<%= q %>" placeholder="Folio, materia o remitente" maxlength="100">
+  </form>
+</div>
+
+<% if (resultado.rows.length === 0) { %>
+  <section class="card empty-state">
+    <%- include('../../partials/icon', { name: 'inbox' }) %>
+    <p><%= q ? 'No hay documentos que coincidan con la búsqueda.' : 'No hay documentos en esta carpeta.' %></p>
+    <% if (q) { %><a href="/panel/bandeja-entrada/<%= carpeta.slug %>">Limpiar búsqueda</a><% } %>
+  </section>
+<% } else { %>
+  <div class="table-wrap">
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th scope="col">Folio</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Materia</th>
+          <th scope="col">Remitente</th>
+          <th scope="col">Fecha doc.</th>
+          <th scope="col">Recibido</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (const e of resultado.rows) { %>
+          <tr class="<%= e.leido ? '' : 'unread' %>">
+            <td data-label="Folio" class="mono"><%= e.folio %></td>
+            <td data-label="Tipo"><span class="tag"><%= tipos[e.tipo] %></span></td>
+            <td data-label="Materia" class="materia">
+              <a href="/panel/bandeja-entrada/doc/<%= e.id %>"><% if (!e.leido) { %><span class="dot" aria-label="Sin leer"></span><% } %><%= e.materia %></a>
+            </td>
+            <td data-label="Remitente"><%= e.remitente %></td>
+            <td data-label="Fecha doc."><%= formatDate(e.fecha_documento) %></td>
+            <td data-label="Recibido"><%= formatDate(e.recibido_at, { time: true }) %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if (resultado.pages > 1) { const qs = q ? `&q=${encodeURIComponent(q)}` : ''; %>
+    <nav class="pager" aria-label="Paginación">
+      <% if (resultado.page > 1) { %><a href="?page=<%= resultado.page - 1 %><%= qs %>">‹ Anterior</a><% } else { %><span></span><% } %>
+      <span class="muted">Página <%= resultado.page %> de <%= resultado.pages %></span>
+      <% if (resultado.page < resultado.pages) { %><a href="?page=<%= resultado.page + 1 %><%= qs %>">Siguiente ›</a><% } else { %><span></span><% } %>
+    </nav>
+  <% } %>
+<% } %>
+<%- include('../../partials/layout-bottom') %>

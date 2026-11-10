@@ -9,7 +9,19 @@
       <ul>
         <li><a href="/panel" class="<%= active === 'inicio' ? 'active' : '' %>"<%- active === 'inicio' ? ' aria-current="page"' : '' %>><%- include('icon', { name: 'home' }) %><span>Inicio</span></a></li>
         <% for (const item of menu) { %>
-          <li><a href="/panel/<%= item.slug %>" class="<%= active === item.slug ? 'active' : '' %>"<%- active === item.slug ? ' aria-current="page"' : '' %>><%- include('icon', { name: item.icon }) %><span><%= item.label %></span></a></li>
+          <li>
+            <a href="/panel/<%= item.slug %>" class="<%= active === item.slug ? 'active' : '' %>"<%- active === item.slug && !locals.carpetaActual ? ' aria-current="page"' : '' %>><%- include('icon', { name: item.icon }) %><span><%= item.label %></span></a>
+            <% if (item.slug === 'bandeja-entrada' && active === 'bandeja-entrada' && locals.carpetas) { %>
+              <ul class="submenu">
+                <% for (const c of carpetas) { %>
+                  <li><a href="/panel/bandeja-entrada/<%= c.slug %>" class="<%= locals.carpetaActual === c.slug ? 'active' : '' %>"<%- locals.carpetaActual === c.slug ? ' aria-current="page"' : '' %>>
+                    <span><%= c.label %></span>
+                    <% const b = insignia(c, conteos[c.slug]); if (b.n) { %><span class="count<%= b.destacada ? ' count-new' : '' %>" title="<%= b.n %> <%= b.titulo %>"><%= b.n %></span><% } %>
+                  </a></li>
+                <% } %>
+              </ul>
+            <% } %>
+          </li>
         <% } %>
       </ul>
     </nav>
