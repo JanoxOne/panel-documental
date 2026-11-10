@@ -45,3 +45,205 @@ body {
 .login__demo {
   font-size: 0.875rem;
 }
+
+/* ---------- Estructura con sesión ---------- */
+
+.estructura {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.encabezado {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 64px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.encabezado__boton-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: #0a132d;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.encabezado__boton-menu:hover {
+  background: #eee;
+}
+
+.encabezado__boton-menu .cl {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.encabezado__marca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  color: #0a132d;
+}
+
+.encabezado__marca:hover {
+  color: #0a132d;
+  text-decoration: none;
+}
+
+.encabezado__logo {
+  width: auto;
+  height: 44px;
+}
+
+.encabezado__nombre {
+  overflow: hidden;
+  font-family: 'Roboto Slab', serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.encabezado__usuario {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.estructura__cuerpo {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+.estructura__contenido {
+  flex: 1;
+  min-width: 0;
+  padding: 32px;
+}
+
+/* ---------- Menú lateral ---------- */
+
+.menu {
+  flex-shrink: 0;
+  width: 264px;
+  padding: 16px 0;
+  background: #fff;
+  border-right: 1px solid #dee2e6;
+}
+
+.menu__lista,
+.accesos {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.menu__enlace {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #0a132d;
+  border-left: 4px solid transparent;
+}
+
+.menu__enlace:hover {
+  color: #006fb3;
+  text-decoration: none;
+  background: #f8f9fa;
+}
+
+.menu__enlace.active {
+  font-weight: 700;
+  color: #006fb3;
+  background: #e8f2f9;
+  border-left-color: #006fb3;
+}
+
+.menu__enlace .cl,
+.accesos__enlace .cl {
+  flex-shrink: 0;
+}
+
+.estructura__fondo {
+  position: fixed;
+  inset: 64px 0 0;
+  z-index: 10;
+  background: rgba(10, 19, 45, 0.5);
+}
+
+@media (max-width: 991.98px) {
+  .menu {
+    position: fixed;
+    top: 64px;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    overflow-y: auto;
+  }
+
+  .estructura__contenido {
+    padding: 24px 16px;
+  }
+
+  .encabezado__nombre-usuario {
+    display: none;
+  }
+}
+
+/* ---------- Bienvenida ---------- */
+
+.bienvenida__texto {
+  max-width: 60ch;
+  margin-bottom: 24px;
+}
+
+.accesos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.accesos__enlace {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+  padding: 20px;
+  font-weight: 500;
+  color: #0a132d;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.accesos__enlace:hover {
+  color: #006fb3;
+  text-decoration: none;
+  border-color: #006fb3;
+}
+
+.accesos__enlace .cl {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  line-height: 24px;
+  color: #006fb3;
+}
