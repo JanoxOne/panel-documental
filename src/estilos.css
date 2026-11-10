@@ -247,3 +247,10 @@ body {
   line-height: 24px;
   color: #006fb3;
 }
+
+/* El Kit Digital subraya todos los enlaces; en la navegación el subrayado sobra. */
+.encabezado__marca,
+.menu__enlace,
+.accesos__enlace {
+  text-decoration: none;
+}

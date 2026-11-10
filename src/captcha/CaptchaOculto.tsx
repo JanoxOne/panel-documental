@@ -59,6 +59,7 @@ export const CaptchaOculto = forwardRef<CaptchaHandle>(function CaptchaOculto(_p
   const widgetId = useRef<string | null>(null)
   const pendiente = useRef<Pendiente | null>(null)
   const montado = useRef(false)
+  const usado = useRef(false)
 
   async function asegurarWidget(): Promise<{ turnstile: Turnstile; id: string }> {
     const turnstile = await cargarTurnstile()
@@ -81,6 +82,7 @@ export const CaptchaOculto = forwardRef<CaptchaHandle>(function CaptchaOculto(_p
       montado.current = false
       if (widgetId.current !== null) window.turnstile?.remove(widgetId.current)
       widgetId.current = null
+      usado.current = false
     }
   }, [])
 
@@ -102,7 +104,9 @@ export const CaptchaOculto = forwardRef<CaptchaHandle>(function CaptchaOculto(_p
         }
         pendiente.current = actual
         asegurarWidget().then(({ turnstile, id }) => {
-          turnstile.reset(id)
+          // Un token de Turnstile sirve una sola vez: desde el segundo uso se pide uno nuevo.
+          if (usado.current) turnstile.reset(id)
+          usado.current = true
           turnstile.execute(id)
         }, actual.reject)
       })

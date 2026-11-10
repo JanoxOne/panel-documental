@@ -45,6 +45,21 @@ test('ejecutar resuelve con el token que entrega Turnstile', async () => {
   await expect(promesa).resolves.toBe('tok')
 })
 
+test('solo reinicia el widget a partir del segundo uso', async () => {
+  const ref = montar()
+  const primero = ref.current!.ejecutar()
+  await vi.waitFor(() => expect(turnstile.execute).toHaveBeenCalledTimes(1))
+  expect(turnstile.reset).not.toHaveBeenCalled()
+  opciones.callback('uno')
+  await primero
+
+  const segundo = ref.current!.ejecutar()
+  await vi.waitFor(() => expect(turnstile.execute).toHaveBeenCalledTimes(2))
+  expect(turnstile.reset).toHaveBeenCalledTimes(1)
+  opciones.callback('dos')
+  await expect(segundo).resolves.toBe('dos')
+})
+
 test('ejecutar rechaza si Turnstile informa error', async () => {
   const ref = montar()
   const promesa = ref.current!.ejecutar()
