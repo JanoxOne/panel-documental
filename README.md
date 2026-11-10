@@ -56,6 +56,15 @@ npm run seed:demo            # para el usuario admin
 npm run seed:demo -- usuario # para otro usuario
 ```
 
+### Demo rápida
+
+```bash
+npm run demo
+# abrir http://localhost:3000 — usuario: admin · contraseña: Demo#2026
+```
+
+Usa una base separada (`data/demo.db`) con documentos de ejemplo. La contraseña es pública: es sólo para demostración local, no para producción.
+
 ## Pruebas
 
 ```bash
