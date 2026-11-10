@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { esModoDemo } from '../modo'
 
 export interface CaptchaHandle {
   /** Ejecuta el captcha invisible y entrega el token de Turnstile. */
@@ -57,6 +58,16 @@ interface Pendiente {
 }
 
 export const CaptchaOculto = forwardRef<CaptchaHandle>(function CaptchaOculto(_props, ref) {
+  return esModoDemo() ? <CaptchaSimulado ref={ref} /> : <CaptchaTurnstile ref={ref} />
+})
+
+/** Sustituto para el modo demo: entrega un token ficticio sin contactar a Cloudflare. */
+const CaptchaSimulado = forwardRef<CaptchaHandle>(function CaptchaSimulado(_props, ref) {
+  useImperativeHandle(ref, () => ({ ejecutar: () => Promise.resolve('demo-sin-captcha') }))
+  return null
+})
+
+const CaptchaTurnstile = forwardRef<CaptchaHandle>(function CaptchaTurnstile(_props, ref) {
   const contenedor = useRef<HTMLDivElement>(null)
   const widgetId = useRef<string | null>(null)
   const pendiente = useRef<Pendiente | null>(null)

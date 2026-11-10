@@ -1,10 +1,11 @@
-import { BrowserRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, HashRouter, MemoryRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { ProveedorSesion, useSesion } from './auth/ProveedorSesion'
 import { RutaProtegida } from './auth/RutaProtegida'
 import { EstructuraApp } from './estructura/EstructuraApp'
 import { SECCIONES } from './estructura/secciones'
 import { PaginaBienvenida } from './paginas/PaginaBienvenida'
 import { PaginaLogin } from './paginas/PaginaLogin'
+import { esModoDemo } from './modo'
 import { PaginaSeccion } from './paginas/PaginaSeccion'
 
 function Raiz() {
@@ -36,6 +37,10 @@ export default function App({ rutaInicial }: { rutaInicial?: string }) {
         <MemoryRouter initialEntries={[rutaInicial]}>
           <Rutas />
         </MemoryRouter>
+      ) : esModoDemo() ? (
+        <HashRouter>
+          <Rutas />
+        </HashRouter>
       ) : (
         <BrowserRouter>
           <Rutas />

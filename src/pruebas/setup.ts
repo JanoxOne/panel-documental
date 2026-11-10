@@ -10,6 +10,7 @@ beforeEach(() => {
 afterEach(() => {
   cleanup()
   vi.restoreAllMocks()
+  vi.unstubAllEnvs()
   sessionStorage.clear()
   localStorage.clear()
 })

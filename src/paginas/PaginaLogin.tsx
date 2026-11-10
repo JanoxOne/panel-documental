@@ -4,6 +4,7 @@ import logo from '../assets/logo-ss-osorno.jpg'
 import { useSesion } from '../auth/ProveedorSesion'
 import { CaptchaOculto } from '../captcha/CaptchaOculto'
 import type { CaptchaHandle } from '../captcha/CaptchaOculto'
+import { esModoDemo } from '../modo'
 
 const MENSAJES = {
   credenciales: 'Usuario o contraseña incorrectos',
@@ -70,6 +71,12 @@ export function PaginaLogin() {
           <strong>Ambiente de demostración</strong>
           <br />
           Usuario: <code>admin</code> · Contraseña: <code>admin123</code>
+          {esModoDemo() && (
+            <>
+              <br />
+              Demo sin conexión: captcha simulado.
+            </>
+          )}
         </div>
 
         {error && (

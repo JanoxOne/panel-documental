@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:demo": "tsc -b && vite build --mode demo && node scripts/terminar-demo.mjs",
     "preview": "vite preview",
     "test": "vitest run"
   },
@@ -28,6 +29,7 @@
     "jsdom": "^31.0.0",
     "typescript": "~7.0.2",
     "vite": "^8.3.6",
+    "vite-plugin-singlefile": "^2.3.4",
     "vitest": "^5.1.0"
   }
 }

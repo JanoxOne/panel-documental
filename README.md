@@ -26,6 +26,19 @@ npm run build    # sitio estático en dist/
 
 Credenciales de demostración: usuario `admin`, contraseña `admin123`.
 
+## Demo sin instalar nada
+
+`demo/gestor-documental-demo.html` es la aplicación completa en un solo archivo.
+Se descarga y se abre con doble clic en cualquier navegador: no necesita Node,
+npm ni conexión a internet. Credenciales: `admin` / `admin123`.
+
+Diferencias con la aplicación normal: el captcha es simulado (Turnstile no
+funciona en archivos abiertos desde el disco) y las rutas van después de un `#`
+en la dirección.
+
+El archivo es una copia compilada: tras cambiar el código se regenera con
+`npm run build:demo`.
+
 ## Configuración
 
 | Variable                  | Descripción                                   | Por defecto                                   |
