@@ -1,0 +1,13 @@
+<%- include('../partials/layout-top', { title }) %>
+<section class="card">
+  <h2>Datos de la cuenta</h2>
+  <dl class="details">
+    <dt>Nombre</dt><dd><%= currentUser.full_name %></dd>
+    <dt>Usuario</dt><dd><%= currentUser.username %></dd>
+    <dt>Correo</dt><dd><%= currentUser.email || '—' %></dd>
+    <dt>Rol</dt><dd><%= currentUser.role === 'admin' ? 'Administrador' : 'Usuario' %></dd>
+    <dt>Último acceso</dt><dd><%= currentUser.last_login_at || '—' %></dd>
+    <dt>Cuenta creada</dt><dd><%= currentUser.created_at %></dd>
+  </dl>
+</section>
+<%- include('../partials/layout-bottom') %>

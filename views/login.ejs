@@ -1,0 +1,40 @@
+<%- include('partials/head', { title }) %>
+<body class="login-page">
+  <main class="login-card">
+    <div class="login-brand">
+      <span class="brand-mark"><%- include('partials/icon', { name: 'doc' }) %></span>
+      <h1>Panel Documental</h1>
+      <p>Ingrese sus credenciales para continuar</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert" role="alert"><%= error %></div>
+    <% } %>
+
+    <form id="login-form" method="post" action="/login" autocomplete="on" novalidate
+          data-challenge="<%= captcha.challenge %>" data-difficulty="<%= captcha.difficulty %>">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="captcha_challenge" value="<%= captcha.challenge %>">
+      <input type="hidden" name="captcha_nonce" id="captcha_nonce" value="">
+
+      <label for="username">Usuario</label>
+      <input id="username" name="username" type="text" required autocomplete="username"
+             autocapitalize="none" spellcheck="false" maxlength="64" value="<%= username %>" autofocus>
+
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password" required autocomplete="current-password" maxlength="256">
+
+      <!-- Campo trampa: invisible para personas, los bots suelen rellenarlo. -->
+      <div class="hp" aria-hidden="true">
+        <label for="<%= captcha.honeypotField %>">No completar</label>
+        <input id="<%= captcha.honeypotField %>" name="<%= captcha.honeypotField %>" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="login-submit">Ingresar</button>
+      <noscript><p class="muted">Debe habilitar JavaScript para iniciar sesión.</p></noscript>
+    </form>
+  </main>
+  <script src="/js/sha256.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<%- include('../partials/layout-top', { title }) %>
+<section class="welcome">
+  <h2>Bienvenido/a, <%= currentUser.full_name %></h2>
+  <p class="muted">
+    <% if (currentUser.last_login_at) { %>Último acceso registrado: <%= currentUser.last_login_at %> (UTC).<% } %>
+    Seleccione una opción del menú lateral para comenzar.
+  </p>
+</section>
+
+<section class="tiles">
+  <% for (const item of menu) { %>
+    <a class="tile" href="/panel/<%= item.slug %>">
+      <span class="tile-icon"><%- include('../partials/icon', { name: item.icon }) %></span>
+      <span class="tile-label"><%= item.label %></span>
+    </a>
+  <% } %>
+</section>
+<%- include('../partials/layout-bottom') %>
