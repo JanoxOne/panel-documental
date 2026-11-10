@@ -14,6 +14,8 @@ export function PaginaLogin() {
   const { iniciarSesion } = useSesion()
   const captcha = useRef<CaptchaHandle>(null)
   const enCurso = useRef(false)
+  const campoUsuario = useRef<HTMLInputElement>(null)
+  const campoContrasena = useRef<HTMLInputElement>(null)
   const [usuario, setUsuario] = useState('')
   const [contrasena, setContrasena] = useState('')
   const [validado, setValidado] = useState(false)
@@ -28,7 +30,9 @@ export function PaginaLogin() {
     if (enCurso.current) return
     setValidado(true)
     setError(null)
-    if (usuario.trim() === '' || contrasena === '') return
+    // El foco va al primer campo con error para que su mensaje se anuncie.
+    if (usuario.trim() === '') return campoUsuario.current?.focus()
+    if (contrasena === '') return campoContrasena.current?.focus()
 
     enCurso.current = true
     setEnviando(true)
@@ -46,6 +50,7 @@ export function PaginaLogin() {
         if (resultado.error === 'credenciales') {
           setContrasena('')
           setValidado(false)
+          campoContrasena.current?.focus()
         }
       }
       // Con sesión iniciada, la ruta "/" redirige sola a la bienvenida.
@@ -78,6 +83,7 @@ export function PaginaLogin() {
             <label htmlFor="usuario">Usuario</label>
             <input
               id="usuario"
+              ref={campoUsuario}
               className={`form-control${faltaUsuario ? ' is-invalid' : ''}`}
               type="text"
               autoComplete="username"
@@ -99,6 +105,7 @@ export function PaginaLogin() {
             <label htmlFor="contrasena">Contraseña</label>
             <input
               id="contrasena"
+              ref={campoContrasena}
               className={`form-control${faltaContrasena ? ' is-invalid' : ''}`}
               type="password"
               autoComplete="current-password"

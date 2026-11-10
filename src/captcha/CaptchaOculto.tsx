@@ -10,6 +10,8 @@ export const TIEMPO_MAXIMO_CAPTCHA_MS = 10_000
 const URL_SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
 // Clave pública de prueba de Cloudflare: siempre aprueba, sin interacción.
 const CLAVE_DE_PRUEBA = '1x00000000000000000000BB'
+// La clave propia debe ser de un widget de tipo "Invisible": el contenedor está oculto,
+// así que un desafío interactivo no se podría resolver.
 const CLAVE_SITIO: string = import.meta.env.VITE_TURNSTILE_SITE_KEY || CLAVE_DE_PRUEBA
 
 interface Turnstile {

@@ -13,7 +13,7 @@ La interfaz usa el [Kit Digital del Gobierno de Chile](https://www.npmjs.com/pac
 
 ## Requisitos
 
-- Node.js 20 o superior.
+- Node.js 20.19 o superior, o 22.12 o superior.
 
 ## Uso
 
@@ -33,6 +33,10 @@ Credenciales de demostración: usuario `admin`, contraseña `admin123`.
 | `VITE_TURNSTILE_SITE_KEY` | Clave pública de Cloudflare Turnstile         | `1x00000000000000000000BB` (clave de prueba)  |
 
 Se define en un archivo `.env.local` o en el entorno al compilar.
+
+La clave propia debe corresponder a un widget de Turnstile de tipo **Invisible**.
+Con una clave de tipo "Managed" o "Non-interactive" el desafío quedaría oculto y
+ningún usuario podría iniciar sesión.
 
 ## Limitaciones de esta etapa
 

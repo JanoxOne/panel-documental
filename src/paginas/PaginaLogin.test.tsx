@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, expect, test, vi } from 'vitest'
 import App from '../App'
@@ -59,13 +59,38 @@ test('si el captcha falla se avisa, no hay sesión y se puede reintentar', async
   expect(screen.getByRole('button', { name: 'Ingresar' })).toBeEnabled()
 })
 
-test('mientras se envía, el botón está deshabilitado y hay un solo intento', async () => {
+test('mientras se envía, el botón está deshabilitado', async () => {
   ejecutar.mockReturnValue(new Promise(() => {}))
   await ingresar('admin', 'admin123')
-  const boton = screen.getByRole('button', { name: /Ingres/ })
-  expect(boton).toBeDisabled()
-  await user.type(screen.getByLabelText('Contraseña'), '{Enter}')
+  expect(screen.getByRole('button', { name: /Ingres/ })).toBeDisabled()
+})
+
+test('dos envíos seguidos del formulario producen un solo intento', async () => {
+  ejecutar.mockReturnValue(new Promise(() => {}))
+  await user.type(screen.getByLabelText('Usuario'), 'admin')
+  await user.type(screen.getByLabelText('Contraseña'), 'admin123')
+  const formulario = screen.getByLabelText('Usuario').closest('form')!
+  fireEvent.submit(formulario)
+  fireEvent.submit(formulario)
   expect(ejecutar).toHaveBeenCalledTimes(1)
+})
+
+test('con campos vacíos el foco va al primer campo con error', async () => {
+  await user.click(screen.getByRole('button', { name: 'Ingresar' }))
+  expect(screen.getByLabelText('Usuario')).toHaveFocus()
+})
+
+test('si solo falta la contraseña, el foco va a la contraseña', async () => {
+  await user.type(screen.getByLabelText('Usuario'), 'admin')
+  await user.click(screen.getByRole('button', { name: 'Ingresar' }))
+  expect(screen.getByLabelText('Contraseña')).toHaveFocus()
+})
+
+test('tras credenciales incorrectas el foco vuelve a la contraseña', async () => {
+  ejecutar.mockResolvedValue('token')
+  await ingresar('admin', 'mala')
+  await screen.findByRole('alert')
+  expect(screen.getByLabelText('Contraseña')).toHaveFocus()
 })
 
 test('muestra el logo y el aviso de demostración', () => {
