@@ -2,11 +2,12 @@ import { BrowserRouter, MemoryRouter, Navigate, Route, Routes } from 'react-rout
 import { ProveedorSesion, useSesion } from './auth/ProveedorSesion'
 import { RutaProtegida } from './auth/RutaProtegida'
 import { SECCIONES } from './estructura/secciones'
+import { PaginaLogin } from './paginas/PaginaLogin'
 import { PaginaSeccion } from './paginas/PaginaSeccion'
 
 function Raiz() {
   const { sesion } = useSesion()
-  return sesion ? <Navigate to="/inicio" replace /> : <h1>Gestor Documental</h1>
+  return sesion ? <Navigate to="/inicio" replace /> : <PaginaLogin />
 }
 
 function Rutas() {

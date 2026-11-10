@@ -1,0 +1,47 @@
+/* Estilos propios del Gestor Documental, sobre el Kit Digital (gob.cl). */
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: #f8f9fa;
+}
+
+/* ---------- Login ---------- */
+
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: 24px 16px;
+}
+
+.login__tarjeta {
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+}
+
+.login__logo {
+  display: block;
+  width: 120px;
+  height: auto;
+  margin: 0 auto 20px;
+}
+
+.login__titulo {
+  margin-bottom: 24px;
+  font-size: 1.75rem;
+  text-align: center;
+}
+
+.login__demo {
+  font-size: 0.875rem;
+}
